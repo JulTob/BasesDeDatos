@@ -2,7 +2,7 @@
 # Tema 1
 
 
-### Ejemplo: Modelo Entidad Relación Extendido (ERE)
+### Ejemplo: Modelo Entidad Relación Extendido (ERE)
 
 Obtener el esquema conceptual correspondiente a las salas de un hospital:
 a. En una clínica se lleva un registro de pacientes, un registro de personal y uno de
@@ -31,22 +31,27 @@ config:
 graph LR
   subgraph Hospital
     direction TB
-    paciente[Paciente]
-    personal[Personal]
+    subgraph Personal
+      direction TB
+      tP(telefono) & dP(Dirección) & nP(Número) & nmP(Nombre)
+      end
+    subgraph paciente
+      direction TB
+      nPc(N Registro) & nmPc(Nombre)
+      end    
     sala[Sala]
     trabaja{Trabaja En}
     internado{Internado En}
     end
 
-    personal --> trabaja --> sala
+    Personal --> trabaja --> sala
     paciente --> internado --> sala
     Software <--> data
 
-    personal --> (telefono) & (Dirección) & (Número) & (Nombre)
 
 
     paciente:::rojo
-    personal:::azul
+    Personal:::azul
     sala:::verde
     trabaja:::amarillo
     internado:::cian
