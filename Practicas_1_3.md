@@ -89,8 +89,9 @@ CAMARERO {
 str Area
 }
 
-    EMPLEADO ||--|o RECEPCIONISTA : "is a"
-    EMPLEADO ||--|o CAMARERO : "is a"
+    EMPLEADO ||--|| disjunto : "∇"
+    disjunto ||--|o RECEPCIONISTA : "is a"
+    disjunto ||--|o CAMARERO : "is a"
 
 RECEPCIONISTA ||--o{ Reserva: gestiona
 Reserva ||--o{ FACTURA: asociada
@@ -104,6 +105,8 @@ date Emision
 
 HABITACION:::debil
 FACTURA:::debil
+disjunto:::disj
 classDef debil stroke:#f00
+classDef disj stroke:#f80
 
 ```
