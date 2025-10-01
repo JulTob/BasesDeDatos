@@ -88,9 +88,12 @@ CAMARERO {
 str Area
 }
 
+    EMPLEADO ||--|o RECEPCIONISTA : "is a"
+    EMPLEADO ||--|o CAMARERO : "is a"
 
 RECEPCIONISTA ||--|| Reserva: gestiona
-FACTURA ||--|| Reserva: asociada
+ Reserva||--{| FACTURA: asociadas
+
 
 FACTURA{
 id N_Factura
