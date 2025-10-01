@@ -92,7 +92,7 @@ str Area
     EMPLEADO ||--|o CAMARERO : "is a"
 
 RECEPCIONISTA ||--|| Reserva: gestiona
-Reserva ||--{| FACTURA: asociada
+Reserva ||--o{ FACTURA: asociada
 
 
 FACTURA{
