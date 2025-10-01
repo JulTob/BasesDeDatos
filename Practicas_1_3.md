@@ -91,7 +91,7 @@ str Area
     EMPLEADO ||--|o RECEPCIONISTA : "is a"
     EMPLEADO ||--|o CAMARERO : "is a"
 
-RECEPCIONISTA ||--|| Reserva: gestiona
+RECEPCIONISTA ||--o{ Reserva: gestiona
 Reserva ||--o{ FACTURA: asociada
 
 
