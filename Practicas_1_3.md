@@ -65,7 +65,8 @@ tlf  Telefono
 }
 
 HOTEL ||--|{ HABITACION : contiene
-CLIENTE ||--o{ HABITACION: reserva
+CLIENTE ||--o{ Reserva: reserva
+Reserva ||--o{ HABITACION: reserva
 
 Reserva {
 id cliente
