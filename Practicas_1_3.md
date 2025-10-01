@@ -89,7 +89,7 @@ CAMARERO {
 str Area
 }
 
-    EMPLEADO ||--|| disjunto : "∇"
+    EMPLEADO ||--o| disjunto : "∇"
     disjunto ||--|o RECEPCIONISTA : "is a"
     disjunto ||--|o CAMARERO : "is a"
 
