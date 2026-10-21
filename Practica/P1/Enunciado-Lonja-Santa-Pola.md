@@ -1,156 +1,113 @@
-# Práctica 1 — Lonja de Santa Pola
+# Práctica 1 Modelos Conceptual y Relacional
 
-
-## Modelo Conceptual (ERE) y Relacional
-
-> Nota de transcripción: el PDF facilitado contiene requisitos mezclados con una resolución. Se recogen aquí los fragmentos del enunciado presentes en ese documento, sin el SQL, los diagramas ni los comentarios de diseño. Se conserva la numeración disponible: no aparece el apartado 3.1. El documento no especifica una fecha de entrega.
+**Fundamentos de Bases de Datos**  
+2º Grado en Ciencia de Datos e Inteligencia Artificial  
+Curso 2026-2027
 
 ## 1. Objetivos
 
-- Access 2016/2019/2021/2024.
-  - Modelización ERE y su correspondiente Relacional.
-  - Creación de tablas con sus campos así como la definición de los dominios de los campos y establecimiento de las relaciones.
+Adquirir las destrezas básicas en la modelización ERE, documentando el correspondiente modelo relacional el cual se implementará en base de datos relacional Microsoft Access 2016/2019/2021/2024. Estos ejercicios contienen los siguientes elementos básicos a desarrollar: modelización ERE y su correspondiente Relacional, creación de tablas con sus campos así como la definición de los dominios de los campos y establecimiento de las relaciones.
 
-## 2. Enunciado de la práctica
+## 2. Esquema metodológico de trabajo
 
-La lonja de pescado de Santa Pola desea agilizar la gestión de su negocio a tal efecto, nos solicita proveerlos de una solución de bases de datos.
+En primer lugar se recomienda al alumno revisar las diapositivas de la introducción al modelo ERE. De igual manera se recomienda el uso del material de apoyo que permitirá al alumno ejercitarse con Access.
 
-Cada día, los barcos llevan la pesca a la lonja, siendo que allí, se subasta la captura. Normalmente los compradores son pescaderías de la zona. Tras múltiples entrevistas con los usuarios y labores de análisis previo, hemos obtenido las siguientes especificaciones iniciales:
+## 3. Enunciado de la práctica
 
-### Lotes
+La lonja de pescado de Santa Pola desea agilizar la gestión de su negocio a tal efecto, nos solicita proveerlos de una solución de bases de datos. Cada día, los barcos llevan la pesca a la lonja, siendo que allí, se subasta la captura. Normalmente los compradores son pescaderías de la zona. Tras múltiples entrevistas con los usuarios y labores de análisis previo, hemos obtenido las siguientes especificaciones iniciales:
 
-La captura del día se distribuye en lotes.
+- A la llegada de la captura del día, esta se distribuye en lotes, momento en el que se les asigna un código único. Tras este trabajo inicial los lotes se subastan. Cada lote consta de un número de cajas de una determinada especie (por ejemplo, pescadilla, boquerones, cangrejos, etc.) así como el número de kilos total y la fecha de llegada. Además, es necesario conocer el precio por kilo de salida y el precio total de salida del lote.
 
-- Código único.
-- Número de cajas.
-- Una determinada especie.
-- Número de kilos total.
-- Fecha de llegada.
-- Precio por kilo de salida.
-- Precio total de salida del lote.
-- Qué barco capturó cada lote.
+- De cada especie guardaremos cierto código no repetible, un nombre y un tipo (por ejemplo, moluscos, pescado blanco, etc.).
 
-### Especies
+- Se almacenará también información sobre los barcos que entregan la pesca en la lonja para saber qué barco capturó cada lote. De dichos barcos guardaremos su matrícula, CIF, nombre, clase, nombre del capitán y del armador. Tanto la matrícula como el CIF son únicos.
 
-- Código (no repetible).
-- Nombre.
-- Tipo (por ejemplo, moluscos, pescado blanco, etc.).
+- Resulta que los barcos pueden capturar las especies que componen los lotes y faenar en diferentes caladeros. De dichos caladeros nos interesa conocer el nombre (único), su extensión y ubicación (definida mediante las coordenadas GPS latitud y longitud). En la lonja es imperativo saber qué barcos y en qué caladeros se han capturado las especies (los kilos de cada especie y periodo de tiempo de faena representado por una fecha de inicio y otra de fin).
 
-### Barcos
+- Una vez empezada la subasta, los distintos compradores pujan por los lotes en los que están interesados. A los compradores se les asigna un código (no repetible), su nombre, dirección, DNI o CIF, así como la cuota anual que deben pagar a la lonja en cuestión. Al finalizar la subasta, un lote puede quedar sin adjudicar o ser adquirido por el comprador que haya realizado la mejor puja. De los lotes adjudicados se guarda el precio de compra por kilo y el precio total de adjudicación.
 
-- Matrícula.
-- Nombre.
-- Clase.
-- Nombre del capitán.
-- Nombre del armador.
-- CIF.
+- Es crucial la información de los pagos que realiza la lonja a los barcos que entregan la pesca diaria y de los pagos que efectúan los compradores por la adquisición de los lotes. Respecto a los compradores, existen compradores que tienen crédito, realizando los pagos al final de cada mes; de estos compradores se guarda un número de cuenta bancaria, el último importe acumulado hasta el momento y la fecha de vencimiento del pago (sólo nos interesa la mensualidad en curso). Por otro lado, existen compradores que realizan los pagos al contado, de los que interesa guardar la forma habitual de pago (efectivo o tarjeta). Un comprador no puede ser de ambos tipos a la vez.
 
-### Caladeros
+- La lonja genera una factura que incluye uno o varios lotes que ha adquirido el comprador. De estas facturas se guarda un número, una fecha de emisión y el importe total. En dichas facturas consta el comprador (que es quien deberá abonarla) así como los lotes que incluye. En las facturas emitidas por los barcos, la lonja almacena además de los datos mencionados de la factura, el CIF del barco y los códigos de lote facturados. En las facturas emitidas a los compradores sin crédito necesitamos saber el estado de éstas (pendiente o pagada).
 
-- Nombre (único).
-- Extensión.
-- Ubicación [GPS]:
-  - Latitud.
-  - Longitud.
+### 3.1. Modelo ERE
 
-### Faenaje
+A partir de la información descrita en el anterior apartado realizar el diseño del esquema conceptual (ERE) utilizando Microsoft Word o similar para documentarlo. Dicho documento, además de contar con el grafo ERE ajustado a los elementos impartidos en clase, ha de contar con un apartado que indique, razonadamente, todos los supuestos semánticos que se han realizado, y que surgen de la ausencia de información relativa en ellos en el propio enunciado. En definitiva, se trata de incluir, además de los supuestos semánticos que se consideren oportunos para justificar todas las decisiones de diseño y la semántica perdida si la hubiese, los siguientes elementos:
 
-- Faena:
-  - Un barco (matrícula).
-  - En un caladero (nombre).
-  - Una especie (código).
-  - Los kilos obtenidos de cada especie.
-  - En un intervalo de tiempo:
-    - Una fecha de inicio.
-    - Y otra de fin.
+- Entidades.
 
-### Compradores
+- Interrelaciones (Relaciones).
 
-- Código (no repetible).
-- Nombre.
-- Dirección.
-- DNI o CIF.
-- Cuota anual que deben pagar a la lonja.
+- Tipo de Interrelaciones (Tipo de Relación).
 
-### Compradores: Creditores y Contadores
+- Participación de las entidades en las Interrelaciones.
 
-- Existen compradores que tienen crédito (creditores), realizando los pagos al final de cada mes:
-  - Se guarda un número de cuenta bancaria.
-  - El último importe acumulado hasta el momento.
-  - Y la fecha de vencimiento del pago.
-- Existen los compradores que realizan los pagos al contado (contadores) sobre los que no se necesita guardar información adicional.
-- Un comprador no puede ser de ambos tipos a la vez.
+- Participaciones máximas y mínimas de las entidades en las Interrelaciones.
 
-### Adjudicación
+- Respecto a las relaciones, existe una relación ternaria que el alumno debe identificar. De igual manera se debe identificar la cardinalidad de cada rama, así como las participaciones máximas y mínimas.
 
-Los lotes se subastan. Cada lote será adquirido por el comprador que realice la mejor puja.
+- Atributos según tipología.
 
-- Precio de compra por kilo.
-- Precio total de adjudicación del lote.
-- Cada lote será adquirido por un comprador.
-- Un comprador puede adquirir varios lotes.
+- Generalización – Especialización.
 
-### Facturas
+- … en definitiva todos los elementos explicados para los esquemas ERE necesarios para reflejar el enunciado los más fielmente posible.
 
-Facturas de Pagos (de los compradores por los lotes).
+Gráficamente, una relación ternaria se puede representar como aparece en el dibujo de más abajo, siendo:
 
-- Cada factura corresponde a un comprador.
-- Una factura puede incluir uno o varios lotes.
-- Número de factura.
-- Fecha de emisión.
-- Importe total.
-- Estado (pendiente o pagada).
-- Cada lote en exactamente una factura.
-- Un comprador puede tener muchas facturas.
+a) A, B y C las entidades participantes.
 
-### Factura Proveedor
+b) R la relación ternaria.
 
-Las facturas emitidas por los barcos:
+c) X, Y y Z las cardinalidades que toman los valores 1 o N (puedes usar otras letras como M y P para representar “muchos”).
 
-- Datos básicos:
-  - Número de factura.
-  - Fecha de emisión.
-  - Importe total.
-- El CIF del barco (desde matrícula).
-- Los códigos de lote facturados.
+d) (a,b), (c,d) y (e,f) las participaciones máximas y mínimas.
 
-## 3.2. Modelo Relacional
+```mermaid
+flowchart TD
+A[A] ---|"X · (a,b)"| R{R}
+B[B] ---|"Y · (c,d)"| R
+R ---|"Z · (e,f)"| C[C]
+```
+### 3.2. Modelo Relacional
 
-Basándose en el esquema conceptual (Modelo ERE) desarrollado en el anterior apartado se deberá crear el Modelo Relacional, el cual reflejará lo más fielmente posible una solución al problema que se nos plantea. Éste se ha de documentar utilizando la herramienta Microsoft Visio usando la plantilla para Bases de Datos relacionales con notaciones IDEF1X haciendo constar, los siguientes elementos:
+Basándose en el esquema conceptual (Modelo ERE) desarrollado en el anterior apartado se deberá crear el Modelo Relacional, el cual reflejará lo más fielmente posible una solución al problema que se nos plantea. Éste se ha de documentar utilizando la herramienta Microsoft Visio 2010 usando la plantilla para Bases de Datos relacionales con notaciones IDEF1X haciendo constar, los siguientes elementos:
 
 - Tablas con sus atributos o campos y sus dominios.
+
 - Claves Primarias y Alternativas.
+
 - Claves Ajenas indicando su dependencia.
+
 - Los posibles o no nulos.
+
 - Valores por defecto.
+
 - Cardinalidades.
+
 - Acción para la preservación de la Integridad Referencial.
+
 - … en definitiva, todos los elementos explicados para los esquemas relacionales que sean necesarios para plasmar el enunciado.
 
-Solo se podrán usar los siguientes tipos de datos:
+Solo se podrán usar los siguientes tipos de datos: VARCHAR, CHAR, NUMBER y DATE. Recordad que es importante que el tipo de dato, y en general el dominio de cada atributo, esté desarrollado conforme al concepto que representa.
 
-- `VARCHAR`.
-- `CHAR`.
-- `NUMBER`.
-- `DATE`.
+Para transformar una interrelación ternaria del tipo Muchos, Muchos, Muchos (N:N:N), se crea una nueva tabla que incluye como claves ajenas las claves principales de las tres entidades participantes, así como los atributos propios de la relación. En general, el conjunto de las tres claves ajenas podrá constituir la clave primaria de la nueva tabla. Sin embargo, cuando sea necesario almacenar varias ocurrencias correspondientes a una misma combinación de las tres entidades, por ejemplo, en distintos períodos de tiempo, deberá adaptarse la clave primaria o la estructura relacional para poder distinguirlas.
 
-Recordad que es importante que el tipo de dato, y en general el dominio de cada atributo, esté desarrollado conforme al concepto que representa.
-
-La forma de transformar una relación ternaria del tipo Muchos, Muchos, Muchos (N:N:N) es, una vez creadas las tablas correspondientes a las entidades partícipes, crear una nueva tabla que representará dicha relación ternaria y que debe incluir como claves foráneas las claves principales de cada una de las tres entidades partícipes. El conjunto formado por estas claves foráneas será la clave principal de la nueva tabla. En dicha nueva tabla se debe incluir también los atributos de la relación siguiendo los mismos criterios que se siguen en los atributos de una relación binaria de tipo N:N.
-
-## 3.3. Creación de la base de datos
+### 3.3. Creación de la base de datos
 
 En consonancia con lo desarrollado en el anterior apartado, construid el definitivo esquema de base de datos relacional en Access.
 
 ## 4. Formato y fecha de entrega
 
-Se entregará un fichero comprimido en formato `.zip` o `.rar` cuyo contenido ha de ser:
+Esta práctica se entregará de forma individual. El plazo máximo para la entrega de esta práctica es el 18/11/2026 a las 23:55 horas a través del portal de entrega de tareas de la asignatura del acceso identificado de la UMH.
 
-a) Un documento de Word o PDF con la siguiente información:
+Se entregará un fichero comprimido en formato .zip o .rar cuyo contenido ha de ser:
 
-1. DNI, Nombre y Apellidos del Alumno.
-2. Diseño Conceptual incluyendo los supuestos semánticos y la semántica perdida.
-   1. El fichero Microsoft Visio con el diseño del modelo relacional.
-   2. Las base de datos de Access que se construya a partir del modelo relacional.
+a) Un documento de Word o pdf con la siguiente información:
 
-> La anidación de los dos últimos elementos reproduce la disposición del PDF facilitado.
+   1. DNI, Nombre y Apellidos del Alumno.
+
+   2. Diseño Conceptual incluyendo los supuestos semánticos y la semántica perdida.
+
+b) El fichero Microsoft Visio con el diseño del modelo relacional.
+
+c) La base de datos de Access que se construya a partir del modelo relacional.
