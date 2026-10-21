@@ -1,5 +1,6 @@
 # Práctica 1 — Lonja de Santa Pola
 
+
 ## Modelo Conceptual (ERE) y Relacional
 
 > Nota de transcripción: el PDF facilitado contiene requisitos mezclados con una resolución. Se recogen aquí los fragmentos del enunciado presentes en ese documento, sin el SQL, los diagramas ni los comentarios de diseño. Se conserva la numeración disponible: no aparece el apartado 3.1. El documento no especifica una fecha de entrega.
