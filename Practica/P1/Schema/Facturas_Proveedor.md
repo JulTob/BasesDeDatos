@@ -1,17 +1,10 @@
 # Factura Proveedor
-Las facturas emitidas por los barcos:
-- Datos básicos:
-  - Número de factura.
-  - Fecha de emisión.
-  - Importe total.
-- El CIF del barco (desde matrícula).
-- Los códigos de lote facturados.
+Las facturas emitidas por los barcos.
 
-Las facturas emitidas por los barcos,
-- [x] Datos básicos
-	- [x] Número de factura
-	- [x] Fecha de emisión
-	- [x] Importe total.
+- [x] Número de factura
+- [x] Fecha de emisión
+- [x] Importe total.
+
 - [x] el CIF del barco (desde matricula)
 - [x] Los códigos de lote facturados
 
