@@ -10,7 +10,7 @@ flowchart LR
     Especie[ESPECIE]:::entidad
 
     %% Interrelación
-    DeEspecie{DE_ESPECIE}:::relacion
+    Contiene{Contiene}:::relacion
 
     %% Atributos de LOTE
     cod_lote(["<u>cod_lote</u>"]):::atributo --- Lote
@@ -26,7 +26,7 @@ flowchart LR
     tipo_especie([tipo]):::atributo --- Especie
 
     %% Cardinalidades (mínimo, máximo)
-    Lote ---|"(1,1)"| DeEspecie
-    DeEspecie ---|"(0,N)"| Especie
+    Lote ---|"(1,1)"| Contiene
+    Contiene ---|"(0,N)"| Especie
 
 ```
