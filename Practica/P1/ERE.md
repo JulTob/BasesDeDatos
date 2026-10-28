@@ -21,13 +21,14 @@ flowchart TD
 
   %% Atributos LOTE
   subgraph Lotes
-  cod_lote([cod_lote PK]):::atributo --> Lote
-  num_cajas([num_cajas]):::atributo --> Lote
-  kilos_total([kilos_total]):::atributo --> Lote
-  fecha_llegada([fecha_llegada]):::atributo --> Lote
-  precio_salida_kg([precio_salida_kg]):::atributo --> Lote
-  precio_salida_total([precio_salida_total]):::atributo --> Lote
-  end
+    direction TB
+    cod_lote([cod_lote PK]):::atributo --> Lote
+    num_cajas([num_cajas]):::atributo --> Lote
+    kilos_total([kilos_total]):::atributo --> Lote
+    fecha_llegada([fecha_llegada]):::atributo --> Lote
+    precio_salida_kg([precio_salida_kg]):::atributo --> Lote
+    precio_salida_total([precio_salida_total]):::atributo --> Lote
+    end
 
   %% Atributos ESPECIE
   subgraph Especies
