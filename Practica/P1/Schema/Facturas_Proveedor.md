@@ -44,8 +44,8 @@ CREATE TABLE FACTURA_PROVEEDOR (
     matricula          	CHAR(10) NOT NULL REFERENCES BARCO,
     fecha_emision      	DATE NOT NULL,
     importe_total      	NUMBER(10,2),
-    pagada             	NUMBER(1,0) DEFAULT 1
-    -- 1 = pendiente, 0 = pagada
+    pagada             	NUMBER(1,0) DEFAULT 0
+    -- 0 = pendiente, 1 = pagada
 	);
 
 CREATE TABLE PROVISION (
