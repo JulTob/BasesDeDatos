@@ -72,7 +72,7 @@ flowchart TB
   DeEspecie ---|"(0,N)"| Especie
 
   Lote ---|"(1,1)"| CapturadoPor
-  CapturadoPor ---|"(1,N)"| Barco
+  CapturadoPor ------|"(1,N)"| Barco
 
   Lote ---|"(1,1)"| Adjudicacion
   Adjudicacion ---|"(0,N)"| Comprador
