@@ -17,7 +17,7 @@ flowchart LR
   subgraph Caladeros
     Caladero[CALADERO]:::entidad
     Caladero ---|PK| nombre([nombre]):::pk 
-    Caladero --- ubicacion((ubicacion)):::atributo 
+    Caladero --- ubicacion([ubicacion]):::atributo 
     Caladero --- extension([extension]):::atributo 
       ubicacion:::compuesto
       ubicacion  --- latitud([latitud]):::atributo
