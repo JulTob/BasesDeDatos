@@ -21,7 +21,7 @@ flowchart TD
 
   %% Atributos LOTE
   subgraph Lotes
-    direction LR
+    direction TB
     cod_lote([cod_lote PK]):::atributo --> Lote
     num_cajas([num_cajas]):::atributo --> Lote
     kilos_total([kilos_total]):::atributo --> Lote
