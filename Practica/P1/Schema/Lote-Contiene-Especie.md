@@ -14,7 +14,7 @@ flowchart LR
     Contiene{Contiene}:::relacion
 
     %% Atributos de LOTE
-    cod_lote(["<u>cod_lote</u>"]):::identificador --- Lote
+    cod_lote(["🔑 <u>cod_lote</u>"]):::identificador --- Lote
     num_cajas([num_cajas]):::atributo --- Lote
     kilos_total([kilos_total]):::atributo --- Lote
     fecha_llegada([fecha_llegada]):::atributo --- Lote
@@ -22,7 +22,7 @@ flowchart LR
     precio_total([precio_salida_total]):::atributo --- Lote
 
     %% Atributos de ESPECIE
-    cod_especie(["<u>cod_especie</u>"]):::identificador --- Especie
+    cod_especie(["🔑 <u>cod_especie</u>"]):::identificador --- Especie
     nombre_especie([nombre]):::atributo --- Especie
     tipo_especie([tipo]):::atributo --- Especie
 
