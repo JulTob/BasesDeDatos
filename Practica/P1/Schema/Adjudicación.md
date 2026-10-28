@@ -21,7 +21,7 @@ flowchart TD
   Comprador[COMPRADOR]:::entidad
   Adjudicacion{{ADJUDICACIÓN}}:::relacion
 
-  Adjudicacion --- precio_kg([precio_compra_kg]):::atributo  
+  Adjudicacion --- precio_kg(["precio_compra_kg"]):::atributo  
   Adjudicacion --- precio_total([precio_total]):::atributo 
 
   Lote ---|"(1,1)"| Adjudicacion
