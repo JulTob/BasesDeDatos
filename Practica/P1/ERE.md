@@ -1,5 +1,5 @@
 ```mermaid
-flowchart TD   
+flowchart LR   
 
   classDef entidad stroke:#333,stroke-width:2px;
   classDef relacion stroke:#a66,stroke-width:2px;
