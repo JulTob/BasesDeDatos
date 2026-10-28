@@ -31,3 +31,4 @@ flowchart LR
     Contiene ---|"(0,N)"| Especie
 
 ```
+> 🔑 Atributo identificador: equivale al atributo subrayado de la notación de Chen.
