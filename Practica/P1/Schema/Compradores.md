@@ -29,8 +29,8 @@ flowchart LR
     Comprador --- cuota_anual([cuota_anual]):::atributo 
     end
 
-  Comprador --> es{d} -->|1:0..1| Creditor[CREDITOR]:::entidad
-				es{d} --x|pseudoentidad| contador[CONTADOR]:::pseudoentidad
+  Comprador --> es((d)) -->|1:0..1| Creditor[CREDITOR]:::entidad
+				es((d)) --x|pseudoentidad| contador[CONTADOR]:::pseudoentidad
 
 ```
 
