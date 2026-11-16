@@ -39,15 +39,15 @@ Existen compradores de dos tipos
 ---
 1. ### A Credito (Creditores)
    Que tienen crédito, realizando los pagos al final de cada mes:
-  - [ ] Número de cuenta bancaria (IBAN).
-  - [ ] Importe acumulado hasta el momento.
-  - [ ] Fecha de vencimiento del pago.
+  - [x] Número de cuenta bancaria (IBAN).
+  - [x] Importe acumulado hasta el momento.
+  - [x] Fecha de vencimiento del pago.
   ---
 2. ### Al contado (Contadores)
-  - [ ] No se requiere información adicional
+  - [x] No se requiere información adicional
   ---
 
-> - [ ] Un comprador no puede ser de ambos tipos a la vez.
+> - [x] Un comprador no puede ser de ambos tipos a la vez.
 
 
 
@@ -75,6 +75,8 @@ flowchart LR
 - Tabla COMPRADOR: todos los compradores, sin distinguir.
 - Tabla CREDITOR: solo los compradores que tienen crédito.
   - cod_comprador = PK y FK a COMPRADOR.
+  - Si un comprador está en esta tabla ⇒ es de crédito.
+  - Si no está ⇒ es de contado.
 
 Implementación de _especialización por predicado_.
 
