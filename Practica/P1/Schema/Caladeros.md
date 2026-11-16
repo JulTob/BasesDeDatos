@@ -4,7 +4,7 @@
   - [x]  Ubicación [GPS]
       - [x]  latitud 
       - [x]  longitud.
-      - [ ]  
+
 ```mermaid
 flowchart LR   
   classDef atributo stroke:#088,stroke-width:2px;
