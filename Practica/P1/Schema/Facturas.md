@@ -1,9 +1,9 @@
 
 
-# FACTURAS (Lonja)
+# FACTURAS Emitidas (por Lonja)
 
 
-- [x] Facturas de Pagos (de los compradores por los lotes).
+- [x] Facturas Emitidas (para los compradores, por los lotes).
   - [x] Cada factura corresponde a un comprador.
   - [x] Una factura puede incluir uno o varios lotes.
   - [x] Número de factura
@@ -28,14 +28,14 @@ flowchart LR
 
 
   Comprador[COMPRADOR]:::entidad
-  Factura[FACTURA_CLIENTE]:::entidad
+  Emitidas[FACTURAS_EMITIDAS]:::entidad
   Lote[LOTE]:::entidad
   Incluye{{INCLUYE}}:::relacion
 
-  Factura ---|PK| num_fact([num_factura]):::pk 
-  Factura --- fecha_emision([fecha_emision]):::atributo  
-  Factura --- importe_total([importe_total]):::atributo 
-  Factura --- pendiente([pendiente]):::atributo 
+  Emitidas ---|PK| num_fact([num_factura]):::pk 
+  Emitidas --- fecha_emision([fecha_emision]):::atributo  
+  Emitidas --- importe_total([importe_total]):::atributo 
+  Emitidas --- pendiente([pendiente]):::atributo 
 
   Factura ---|"(1,N)"| Incluye
   Incluye ---|"(1,1)"| Lote
@@ -45,7 +45,7 @@ flowchart LR
 ```
 
 ```sql
-CREATE TABLE FACTURA_CLIENTE (
+CREATE TABLE FACTURAS_EMITIDAS (
     num_factura      	CHAR(10) PRIMARY KEY,
     cod_comprador    	CHAR(5) NOT NULL REFERENCES COMPRADOR,
     fecha_emision    	DATE NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE FACTURA_CLIENTE (
 );
 
 CREATE TABLE INCLUYE (
-    num_factura   CHAR(10) REFERENCES FACTURA_CLIENTE,
+    num_factura   CHAR(10) REFERENCES FACTURAS_EMITIDAS,
     cod_lote      CHAR(5)  REFERENCES LOTE UNIQUE,
     PRIMARY KEY (num_factura, cod_lote)
 );
