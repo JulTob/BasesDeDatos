@@ -1,11 +1,10 @@
 # Adjudicación
 
-Los lotes se subastan. Cada lote será adquirido por el comprador que realice la mejor puja. 
-- [x] Adjudicación 
-  - [x] Precio de compra por kilo
-  - [x] Precio total de adjudicación del lote
-  - [x] Cada lote será adquirido por __un__ comprador.
-  - [x] Un comprador puede adquirir varios lotes
+> Los lotes se subastan. Cada lote será adquirido por el comprador que realice la mejor puja. 
+- [x] Precio de compra por kilo
+- [x] Precio total de adjudicación del lote
+- [x] Cada lote será adquirido por __un__ comprador.
+- [x] Un comprador puede adquirir varios lotes
 
 ```mermaid
 flowchart TD
@@ -48,4 +47,4 @@ Si se modelara la subasta completa, sería necesario realizar la tabla que serí
 
 Esta decisión debería ser secundada por el cliente. Si les interesa hacer este registro, con el coste asociado en memoria y trabajo, se puede implementar una tabla que tendría parametros adecuados (cod_lote, cod_comprador, puja) para seleccionar una puja ganadora. 
 
-> Nota: A falta del simbolo en el software para tabla-relación, se ha usado un tag hexagonal largo, ya que su forma recuerda a la conjunción del rectángulo y el rombo.
+> Nota: A falta del simbolo en Mermaid de Github para tabla-relación, se ha usado un tag hexagonal largo, ya que su forma recuerda a la conjunción del rectángulo (tabla) y el rombo (relación).
