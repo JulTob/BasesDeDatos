@@ -67,7 +67,7 @@ CREATE TABLE INCLUYE (
 Estado Pagada: 
 - 1 = pendiente (TRUE)
 - 0 = pagada (FALSE)
-- `DEFAULT 0` asegura que todas las facturas nuevas comiencen como pagadas, ya que es el default de las .
+- `DEFAULT 0` asegura que todas las facturas nuevas comiencen como pagadas, como el comportamiento por defecto seleccionado.
 - Este campo actúa como booleano.
 - Guardamos el estado para todas las facturas, aunque solo sea relevante para compradores al contado. Para el grupo que no es de interés se ponen como pagadas automaticamente.
   
