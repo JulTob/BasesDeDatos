@@ -2,6 +2,8 @@
 
 Las cinco vistas representan el mismo modelo. Las entidades repetidas mantienen su identidad entre vistas. La pareja junto a cada entidad expresa el mínimo y el máximo de veces que una ocurrencia de esa entidad participa en la relación. [Decisiones del diseño y transformación al relacional](Lonja1.md)
 
+Las figuras siguen el Tema II de Fundamentos de Bases de Datos (pp. 11–12 y 16–19). El subrayado continuo identifica una clave candidata y el discontinuo, la clave parcial de una entidad débil. El doble óvalo indica un atributo multivaluado. Las ramas de un atributo compuesto conducen a sus componentes y el contorno discontinuo distingue un atributo derivado. La línea doble expresa participación total. La negrita facilita la lectura de las etiquetas. En el modelo relacional de Visio, la negrita de un campo indica que su valor es obligatorio (Tema III, p. 21).
+
 ## Captura y procedencia
 
 ![Relaciones de captura y procedencia del lote](Diagramas/01-captura.png)

@@ -4,6 +4,7 @@ flowchart LR
     classDef entidad stroke:#333,stroke-width:2px;
     classDef relacion stroke:#a66,stroke-width:2px;
     classDef atributo stroke:#446,stroke-width:1.5px;
+    classDef derivado stroke:#446,stroke-width:1.5px,stroke-dasharray:5 3;
     classDef identificador stroke:#B8860B,stroke-width:3px,font-weight:bold,font-size:17px;
 
     %% Entidades
@@ -19,7 +20,7 @@ flowchart LR
     kilos_total([kilos_total]):::atributo --- Lote
     fecha_llegada([fecha_llegada]):::atributo --- Lote
     precio_kg([precio_kg_salida]):::atributo --- Lote
-    precio_total([precio_total_salida]):::atributo --- Lote
+    precio_total([precio_total_salida]):::derivado --- Lote
 
     %% Atributos de ESPECIE
     cod_especie(["🔑 <u>cod_especie</u>"]):::identificador --- Especie

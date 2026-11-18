@@ -18,10 +18,10 @@ flowchart LR
   %% Atributos COMPRADOR
   subgraph Compradores
     Comprador[COMPRADOR]:::entidad
-    Comprador ---|PK| cod_comprador([cod_comprador]):::pk
+    Comprador ---|PK| cod_comprador(["<b><u>cod_comprador</u></b>"]):::pk
     Comprador --- nombre([nombre]):::atributo 
     Comprador --- direccion([direccion]):::atributo 
-    Comprador --- dni_cif([dni_cif]):::atributo 
+    Comprador ---|AK| dni_cif(["<b><u>dni_cif</u></b>"]):::atributo
     Comprador --- cuota_anual([cuota_anual]):::atributo 
     end
 
@@ -65,5 +65,7 @@ CREATE TABLE CONTADO (
 ```
 
 El código es la PK del comprador y se hereda como PK y FK en cada subtipo. Las FK exigen que exista el comprador. Para exigir exactamente un subtipo hay que validar en la misma operación el alta o cambio de modalidad, incluidos ambos subtipos. Las dos claves por sí solas permiten tanto la doble pertenencia como la ausencia de subtipo.
+
+Se supone que la modalidad se mantiene desde la primera factura emitida al comprador. La consulta de estado usa su modalidad vigente. Para conservar el estado histórico, cualquier cambio de modalidad debe comprobarse antes de que exista esa primera factura.
 
 Se conserva la unicidad de DNI/CIF como supuesto de identidad fiscal. El IBAN se guarda como texto para conservar letras y ceros iniciales. Los 24 caracteres suponen cuentas españolas.

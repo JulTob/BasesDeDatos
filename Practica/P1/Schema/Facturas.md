@@ -8,6 +8,7 @@
 
 ```mermaid
 flowchart LR
+  classDef derivado stroke:#446,stroke-width:1.5px,stroke-dasharray:5 3;
   Comprador[COMPRADOR] ---|"(0,N)"| Recibe{RECIBE}
   Recibe ===|"(1,1)"| Emitidas[FACTURAS_EMITIDAS]
   Emitidas ===|"(1,N)"| Incluye{INCLUYE}
@@ -15,10 +16,12 @@ flowchart LR
   Emitidas ---|"(0,N)"| Cobro{SE COBRA CON}
   Cobro ===|"(1,1)"| Venta[VENTA]
 
-  Emitidas --- num_fact(["<u>num_factura</u>"])
+  Emitidas --- num_fact(["<b><u>num_factura</u></b>"])
   Emitidas --- fecha_emision([fecha_emision])
-  Emitidas --- importe_total([importe_total])
-  Venta --- cod_pago(["<u>cod_pago</u>"])
+  Emitidas --- importe_total([importe_total]):::derivado
+  Emitidas --- saldo(["saldo · contado"]):::derivado
+  Emitidas --- estado(["estado · contado"]):::derivado
+  Venta --- cod_pago(["<b><u>cod_pago</u></b>"])
   Venta --- fecha([fecha])
   Venta --- importe([importe])
 ```
@@ -58,7 +61,7 @@ INCLUYE representa una relación 1:N. El código de lote como PK impide incluirl
 
 Para una factura de 100 €, un cobro de 40 € deja un saldo pendiente de 60 €. Un segundo cobro de 60 € la deja pagada. Un abono mensual que cubra varias facturas a crédito se desglosa en una imputación VENTA por factura por la parte que corresponda. El modelo conserva la fecha y el importe imputado. Sin un identificador bancario adicional, no se puede reconstruir qué imputaciones proceden de una misma transferencia.
 
-La consulta de Access `ESTADO_CONTADO` devuelve sólo facturas de compradores al contado. La suma de los cobros es cero si aún no hay movimientos. Un saldo cero significa «pagada» y uno positivo, «pendiente». Registrar o modificar un cobro requiere comprobar en la misma operación que el total imputado no supera el de la factura. Esa regla entre filas no la impone una FK.
+La consulta de Access `ESTADO_CONTADO` devuelve sólo facturas de compradores al contado. La suma de los cobros es cero si aún no hay movimientos. Un saldo cero significa «pagada» y uno positivo, «pendiente». Al registrar o modificar un cobro, o al rectificar el importe de la factura, se comprueba en la misma operación que el total imputado no supera el importe facturado. Esa regla abarca la cabecera y sus movimientos.
 
 ```sql
 SELECT

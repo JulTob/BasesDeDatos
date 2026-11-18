@@ -33,8 +33,8 @@ El modelo sigue un lote desde su llegada hasta la subasta, la facturación y el 
 
 La existencia de claves ajenas permite verificar la titularidad de los lotes. Otras reglas afectan a varias filas y requieren comprobar la operación completa.
 
-- Al dar de alta al comprador, verificar que queda en una sola modalidad y que tiene todos los datos de esa modalidad.
+- Al dar de alta al comprador, verificar que queda en una sola modalidad y que tiene todos sus datos. Se supone que la modalidad permanece estable desde la primera factura emitida al comprador, pues su estado de contado se consulta a través de la modalidad vigente.
 - Al emitir o registrar una factura, guardar su cabecera y al menos un lote del titular en la misma operación. Impedir que una modificación deje una factura sin lotes.
-- Al registrar o modificar un cobro o pago, comprobar que su importe es positivo y que los movimientos acumulados caben en el importe de la factura. Calcular el estado de contado a partir del saldo resultante.
+- Al registrar o modificar un cobro o pago, comprobar que su importe es positivo y que los movimientos acumulados caben en el importe de la factura. Comprobar también ese límite si se rectifica el total facturado. Calcular el estado de contado a partir del saldo resultante.
 
 Los dominios de las tablas, las claves y las dependencias se detallan en las [fichas del modelo relacional](Schema/). El enunciado especifica por separado el contenido de la memoria, del dibujo relacional IDEF1X y de la base de datos de Access. [Formato de la entrega](Enunciado-Lonja-Santa-Pola.md)

@@ -14,30 +14,27 @@ La captura del día se distribuye en **Lotes**:
 ```mermaid
 flowchart LR
   classDef atributo stroke:#088,stroke-width:2px;
+  classDef derivado stroke:#088,stroke-width:2px,stroke-dasharray:5 3;
   classDef pk stroke:#800,stroke-width:4px;
   classDef entidad stroke:#404,stroke-width:4px;
   classDef relacion stroke:#840,stroke-width:2px;
-  classDef fk stroke:#080,stroke-width:4px;
 
   %% Atributos LOTE
   subgraph Lotes
     Lote[LOTE]:::entidad
-    Lote ---|PK| cod_lote([cod_lote]):::pk   
+    Lote ---|PK| cod_lote(["<b><u>cod_lote</u></b>"]):::pk
     Lote --- num_cajas([num_cajas]):::atributo  
     Lote --- kilos_total([kilos_total]):::atributo  
     Lote --- fecha_llegada([fecha_llegada]):::atributo  
     Lote --- precio_kg_salida([precio_kg_salida]):::atributo  
-    Lote --- precio_total_salida([precio_total_salida]):::atributo  
-    Lote ---|FK| matricula_barco([matricula_barco]):::fk  
-    Lote ---|FK| cod_especie([cod_especie]):::fk  
+    Lote --- precio_total_salida([precio_total_salida]):::derivado
 
     end 
 
-matricula_barco ---> Barco
-Barco[BARCO]:::entidad
-
-cod_especie ---> Especie
-Especie[ESPECIE]:::entidad
+  Barco[BARCO]:::entidad ---|"(0,N)"| Captura{CAPTURA}:::relacion
+  Captura ===|"(1,1)"| Lote
+  Especie[ESPECIE]:::entidad ---|"(0,N)"| Contiene{CONTIENE}:::relacion
+  Contiene ===|"(1,1)"| Lote
 
 ```
 ```sql
@@ -55,3 +52,5 @@ CREATE TABLE LOTE (
 ```
 
 La pareja de lote y matrícula permite comprobar que el emisor de una factura recibida es el barco que capturó ese lote. El código del lote sigue siendo por sí solo su identificador.
+
+El total de salida se calcula multiplicando los kilos del lote por el precio de salida por kilo y redondeando a céntimos. El esquema almacena ese total. Si cambia uno de sus factores, debe actualizarse en la misma operación.

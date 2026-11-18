@@ -21,7 +21,7 @@ flowchart TD
   Adjudicacion{ADJUDICACIÓN}:::relacion
 
   Adjudicacion --- precio_kg(["precio_kg"]):::atributo
-  Adjudicacion --- precio_total([precio_total]):::atributo 
+  Adjudicacion --- precio_total([precio_total]):::derivado
 
   Lote ---|"(0,1)"| Adjudicacion
   Comprador ---|"(0,N)"| Adjudicacion
@@ -38,6 +38,8 @@ CREATE TABLE ADJUDICACION (
 ```
 
 `cod_lote` es PK porque un lote sólo puede venderse una vez. Si queda desierto, no se inserta una adjudicación. Toda adjudicación identifica a un comprador y conserva el precio por kilo y el total de compra.
+
+El precio total se calcula multiplicando los kilos del lote por el precio de compra por kilo y redondeando a céntimos. El esquema almacena el resultado. Una corrección de peso o precio requiere recalcularlo.
 
 La pareja de lote y comprador sirve de destino a la clave ajena de INCLUYE. Así una factura emitida sólo admite lotes ganados por su titular.
 

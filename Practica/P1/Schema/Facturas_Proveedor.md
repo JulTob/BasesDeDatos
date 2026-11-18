@@ -7,20 +7,22 @@
 
 ```mermaid
 flowchart LR
-  Barco[BARCO] ---|"(0,N)"| Emite{EMITE}
-  Emite ===|"(1,1)"| Recibidas[FACTURAS_RECIBIDAS]
+  Barco[BARCO] ---|"(0,N)"| Emite{"EMITE · identificadora"}
+  Emite ===|"(1,1)"| Recibidas["FACTURAS_RECIBIDAS · entidad débil"]
   Recibidas ===|"(1,N)"| Provision{PROVISION}
   Provision ---|"(0,1)"| Lote[LOTE]
   Recibidas ---|"(0,N)"| Liquida{SE PAGA CON}
   Liquida ===|"(1,1)"| Pago[PAGO_BARCO]
 
-  Recibidas --- num_factura([num_factura del emisor])
+  Recibidas --- num_factura(["<b>num_factura</b> · clave parcial del emisor"])
   Recibidas --- fecha_emision([fecha_emision])
   Recibidas --- importe_total([importe_total])
-  Pago --- cod_pago(["<u>cod_pago</u>"])
+  Pago --- cod_pago(["<b><u>cod_pago</u></b>"])
   Pago --- fecha([fecha])
   Pago --- importe([importe])
 ```
+
+La factura recibida es una entidad débil. Su número local es clave parcial. El rombo identificador la relaciona con el barco emisor. [Diagrama con doble contorno y subrayado discontinuo](../Diagramas/05-factura-recibida.png)
 
 ```sql
 CREATE TABLE FACTURAS_RECIBIDAS (
@@ -56,4 +58,4 @@ Cada barco numera sus propias facturas. Si dos emiten la factura 17, la matrícu
 
 PROVISION comparte la matrícula entre las dos FK. Así sólo admite lotes del emisor y cada lote figura como máximo una vez en este circuito. Puede figurar también en una factura al comprador. Antes de dar por registrada una factura recibida hay que comprobar que contiene por lo menos un lote.
 
-Puede haber varios pagos parciales o ninguno. El saldo del barco para esa factura es el importe total menos sus pagos. La suma no puede superar el importe facturado, por lo que se comprueba al registrar o modificar un movimiento. El estado especial de las facturas a compradores al contado no interviene en este circuito.
+Puede haber varios pagos parciales o ninguno. El saldo del barco para esa factura es el importe total menos sus pagos. Al registrar o modificar un pago, o al rectificar el importe de la factura, se comprueba en la misma operación que la suma de los pagos no supera el importe facturado. El estado especial de las facturas a compradores al contado no interviene en este circuito.

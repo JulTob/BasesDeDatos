@@ -11,7 +11,7 @@ flowchart LR
   %% Atributos ESPECIE
   subgraph Especies
     Especie[ESPECIE]:::entidad
-    Especie ---|PK| cod_especie([cod_especie]):::pk 
+    Especie ---|PK| cod_especie(["<b><u>cod_especie</u></b>"]):::pk
     Especie ---nombre_especie([nombre]):::atributo 
     Especie ---tipo_especie([tipo]):::atributo 
     end

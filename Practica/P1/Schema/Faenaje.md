@@ -5,7 +5,7 @@
     - [x]  🔏 Una especie (código)
     - [x]  los kilos obtenidos de cada especie
     - [x]  en un intervalo de tiempo
-        - [x]  una fecha (_timemark_) de inicio
+        - [x]  una fecha de inicio
         - [x]  y otra de fin.
 
 ```mermaid
@@ -17,13 +17,13 @@ flowchart LR
   Faena --- capturas(["capturas por período · multivaluado"])
   capturas --- periodo([período])
   capturas --- kilos([kg_especie])
-  periodo --- inicio([fecha_inicio])
+  periodo --- inicio(["fecha_inicio · distingue períodos de la misma terna"])
   periodo --- fin([fecha_fin])
 ```
 
 La relación es ternaria N:N:N. Para un barco y un caladero puede haber varias especies, para un barco y una especie varios caladeros y para una especie y un caladero varios barcos. Los tres mínimos son cero porque se admite el alta previa a la primera faena.
 
-Un mismo trío puede faenar en períodos distintos. Cada elemento del conjunto de capturas agrupa un período compuesto de inicio y fin con los kilos de esa ocurrencia. La fecha inicial distingue los períodos de una misma combinación.
+Un mismo trío puede faenar en períodos distintos. Cada elemento del conjunto de capturas agrupa un período compuesto de inicio y fin con los kilos de esa ocurrencia. Se supone un solo comienzo por día para cada terna. Ternas diferentes pueden comenzar el mismo día. En la tabla, `fecha_inicio` completa la clave formada por los tres participantes. La fecha se registra sin hora. [Diagrama de captura y procedencia](../Diagramas/01-captura.png)
 
 ```sql
 CREATE TABLE FAENA (

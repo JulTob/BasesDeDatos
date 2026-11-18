@@ -14,12 +14,12 @@ flowchart LR
   %% Atributos BARCO
   subgraph Barcos
   Barco[BARCO]:::entidad
-  Barco ---|PK| matricula([matricula]):::pk  
+  Barco ---|PK| matricula(["<b><u>matricula</u></b>"]):::pk
   Barco ---nombre([nombre]):::atributo  
   Barco ---clase([clase]):::atributo  
   Barco ---capitan([capitan]):::atributo 
   Barco ---armador([armador]):::atributo 
-  Barco ---|AK| cif([cif]):::atributo
+  Barco ---|AK| cif(["<b><u>cif</u></b>"]):::atributo
   end
 ```
 
