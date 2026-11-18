@@ -1,4 +1,3 @@
-
 # Especies
   - [x]  🔐 __Código__ (no repetible)
   - [x]  Nombre
@@ -22,8 +21,8 @@ flowchart LR
 ```sql
 CREATE TABLE ESPECIE (
     cod_especie   VARCHAR(5) PRIMARY KEY,
-    nombre        VARCHAR(30),
-    tipo          VARCHAR(20)
+    nombre        VARCHAR(30) NOT NULL,
+    tipo          VARCHAR(20) NOT NULL
     );
 ```
 

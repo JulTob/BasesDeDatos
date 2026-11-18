@@ -6,9 +6,6 @@
 - [x]  DNI o CIF,
 - [x]  Cuota anual que deben pagar a la lonja.
 
-
-
-
 ```mermaid
 flowchart LR
   classDef atributo stroke:#088,stroke-width:2px;
@@ -17,7 +14,6 @@ flowchart LR
   classDef fk stroke:#080,stroke-width:4px;
   classDef pkfk stroke:#880,stroke-width:4px;
   classDef entidad stroke:#404,stroke-width:4px;
-  classDef pseudoentidad stroke:#323,stroke-width:4px;
 
   %% Atributos COMPRADOR
   subgraph Compradores
@@ -29,87 +25,45 @@ flowchart LR
     Comprador --- cuota_anual([cuota_anual]):::atributo 
     end
 
-  Comprador --> es((d)) -->|1:0..1| Creditor[CREDITOR]:::entidad
-				es((d)) --x|pseudoentidad| contador[CONTADOR]:::pseudoentidad
-
+  Comprador === es((d))
+  es --- Creditor[CREDITOR]:::entidad
+  es --- Contado[CONTADO]:::entidad
+  Creditor --- iban([iban]):::atributo
+  Creditor --- importe_acumulado([importe_acumulado]):::atributo
+  Creditor --- fecha_vencimiento([fecha_vencimiento]):::atributo
+  Contado --- forma_pago_habitual([forma_pago_habitual]):::atributo
 ```
 
-## Compradores: Creditores y Contadores
-Existen compradores de dos tipos
----
-1. ### A Credito (Creditores)
-   Que tienen crédito, realizando los pagos al final de cada mes:
-  - [x] Número de cuenta bancaria (IBAN).
-  - [x] Importe acumulado hasta el momento.
-  - [x] Fecha de vencimiento del pago.
-  ---
-2. ### Al contado (Contadores)
-  - [x] No se requiere información adicional
-  ---
+## Compradores a crédito y al contado
 
-> - [x] Un comprador no puede ser de ambos tipos a la vez.
+La especialización es disjunta por enunciado. Se supone cobertura total porque las dos modalidades descritas agotan las formas de liquidación de los compradores.
 
-
-
-```mermaid
-flowchart LR
-  classDef atributo stroke:#088,stroke-width:2px;
-  classDef derivado stroke-width:3px, stroke-dasharray:3 3;
-  classDef pk stroke:#800,stroke-width:4px;
-  classDef fk stroke:#080,stroke-width:4px;
-  classDef entidad stroke:#404,stroke-width:4px;
-  classDef pkfk stroke:#880,stroke-width:4px;
-
-  %% Atributos CREDITOR
-  subgraph Creditores
-    Creditor[CREDITOR]:::entidad
-    Creditor ---|PK FK| cod_comprador([cod_comprador]):::pkfk 
-    Creditor --- iban([iban]):::atributo
-    Creditor --- importe_acumulado([importe_acumulado]):::atributo
-    Creditor --- fecha_vencimiento([fecha_vencimiento]):::atributo
-    end
-  cod_comprador--> Comprador
-  Comprador[COMPRADOR]:::entidad
-```
-#### 📝 Notas de Diseño:
-- Tabla COMPRADOR: todos los compradores, sin distinguir.
-- Tabla CREDITOR: solo los compradores que tienen crédito.
-  - cod_comprador = PK y FK a COMPRADOR.
-  - Si un comprador está en esta tabla ⇒ es de crédito.
-  - Si no está ⇒ es de contado.
-
-Implementación de _especialización por predicado_.
-
-Sin tabla para contado. No es necesaria. Ambos grupos son excluyentes. Si está en  _creditor_, no es _contador_.
+- CREDITOR conserva la cuenta, el importe acumulado y el vencimiento de la mensualidad en curso.
+- CONTADO conserva la forma habitual de pago, efectivo o tarjeta. Una compra concreta puede estar pendiente aunque la modalidad habitual sea al contado.
 
 ```sql
 CREATE TABLE COMPRADOR (
     cod_comprador CHAR(5) PRIMARY KEY,
-    nombre        VARCHAR(40),
-    direccion     VARCHAR(60),
-    dni_cif       VARCHAR(15) UNIQUE,
-    cuota_anual   NUMBER(8,2)
+    nombre        VARCHAR(40) NOT NULL,
+    direccion     VARCHAR(60) NOT NULL,
+    dni_cif       VARCHAR(15) NOT NULL UNIQUE,
+    cuota_anual   NUMBER(8,2) NOT NULL CHECK (cuota_anual >= 0)
     );
 
 CREATE TABLE CREDITOR (
-    cod_comprador     CHAR(5) PRIMARY KEY
-                      REFERENCES COMPRADOR,
-    iban              CHAR(24),
-    importe_acumulado NUMBER(10,2),
-    fecha_vencimiento DATE
+    cod_comprador     CHAR(5) PRIMARY KEY REFERENCES COMPRADOR (cod_comprador),
+    iban              CHAR(24) NOT NULL,
+    importe_acumulado NUMBER(10,2) DEFAULT 0 NOT NULL CHECK (importe_acumulado >= 0),
+    fecha_vencimiento DATE NOT NULL
+    );
+
+CREATE TABLE CONTADO (
+    cod_comprador       CHAR(5) PRIMARY KEY REFERENCES COMPRADOR (cod_comprador),
+    forma_pago_habitual VARCHAR(8) NOT NULL
+                        CHECK (forma_pago_habitual IN ('efectivo', 'tarjeta'))
     );
 ```
 
-Suponemos que todo comprador que no aparece en CREDITOR opera al contado.
-Por tanto: 
-- Cada cod_comprador puede aparecer a lo sumo una vez en CREDITOR (PK).
-- Si aparece: es crédito.
-- No hay forma de que también sea de otro tipo, porque no hay otra subtabla.
-- Disjunto garantizado.
-- No hay basura ni nulos forzados.
-- Contado = los que no están en CREDITOR
-  -   Totalidad cubierta, sin necesidad de un atributo tipo
+El código es la PK del comprador y se hereda como PK y FK en cada subtipo. Las FK exigen que exista el comprador. Para exigir exactamente un subtipo hay que validar en la misma operación el alta o cambio de modalidad, incluidos ambos subtipos. Las dos claves por sí solas permiten tanto la doble pertenencia como la ausencia de subtipo.
 
-Un IBAN es un "número" de cuenta, pero contiene caracteres no numéricos (ES, FR, US...). Considero mejor guardarla como un CHAR de 24 caracteres. Se requerirá verificación. 
-
-
+Se conserva la unicidad de DNI/CIF como supuesto de identidad fiscal. El IBAN se guarda como texto para conservar letras y ceros iniciales. Los 24 caracteres suponen cuentas españolas.

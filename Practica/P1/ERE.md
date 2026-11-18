@@ -1,119 +1,43 @@
-```mermaid
+# Modelo conceptual de la lonja
 
-flowchart LR
-    classDef entidad stroke:#333,stroke-width:2px;
-    classDef relacion stroke:#a66,stroke-width:2px;
-    classDef atributo stroke:#446,stroke-width:1.5px;
+Las cinco vistas representan el mismo modelo. Las entidades repetidas mantienen su identidad entre vistas. La pareja junto a cada entidad expresa el mínimo y el máximo de veces que una ocurrencia de esa entidad participa en la relación. [Decisiones del diseño y transformación al relacional](Lonja1.md)
 
-    %% Entidades
-    Lote[LOTE]:::entidad
-    Especie[ESPECIE]:::entidad
+## Captura y procedencia
 
-    %% Interrelación
-    DeEspecie{DE_ESPECIE}:::relacion
+![Relaciones de captura y procedencia del lote](Diagramas/01-captura.png)
 
-    %% Atributos de LOTE
-    cod_lote(["<u>cod_lote</u>"]):::atributo --- Lote
-    num_cajas([num_cajas]):::atributo --- Lote
-    kilos_total([kilos_total]):::atributo --- Lote
-    fecha_llegada([fecha_llegada]):::atributo --- Lote
-    precio_kg([precio_salida_kg]):::atributo --- Lote
-    precio_total([precio_salida_total]):::atributo --- Lote
+Cada lote procede de un solo barco y contiene una sola especie. Un barco o especie recién dado de alta puede tener todavía cero lotes. El caladero se identifica por su nombre y su ubicación se descompone en latitud y longitud.
 
-    %% Atributos de ESPECIE
-    cod_especie(["<u>cod_especie</u>"]):::atributo --- Especie
-    nombre_especie([nombre]):::atributo --- Especie
-    tipo_especie([tipo]):::atributo --- Especie
+En la ternaria **FAENA** intervienen barco, caladero y especie. Fijados barco y caladero, puede haber varias especies. Fijados barco y especie, puede haber varios caladeros. Fijados caladero y especie, pueden intervenir varios barcos. Esto da la cardinalidad N:N:N. La participación individual de cada entidad es (0,N), pues puede darse de alta antes de su primera faena.
 
-    %% Cardinalidades (mínimo, máximo)
-    Lote ---|"(1,1)"| DeEspecie
-    DeEspecie ---|"(0,N)"| Especie
+Para una misma terna se conserva cada captura del período con su fecha de inicio, fecha de fin y kilos. Un período que empieza el lunes y otro que empieza el jueves son dos observaciones distintas, cada una con sus propios kilos. La fecha de inicio distingue las observaciones dentro de la terna. El fin debe ser igual o posterior al inicio. [Transformación de FAENA](Schema/Faenaje.md)
 
-```
-```mermaid
-flowchart TB   
+## Atributos e identificadores
 
-  classDef entidad stroke:#333,stroke-width:2px;
-  classDef relacion stroke:#a66,stroke-width:2px;
-  classDef atributo stroke:#446,stroke-width:1.5px;
+![Atributos e identificadores de la captura](Diagramas/02-atributos.png)
 
-  %% Entidades
-  Lote[LOTE]:::entidad
-  Especie[ESPECIE]:::entidad
-  Barco[BARCO]:::entidad
-  Comprador[COMPRADOR]:::entidad
-  FacturaC[FACTURA_COMPRADOR]:::entidad
+El código del lote y el de la especie identifican sus respectivas entidades. En el barco son únicos la matrícula y el CIF. Los datos de llegada y los precios de salida pertenecen al lote. Los kilos capturados en una faena corresponden a su período. Los precios de compra se conocen al adjudicar. [Lotes](Schema/Lotes.md) · [Especies](Schema/Especies.md) · [Barcos](Schema/Barcos.md) · [Caladeros](Schema/Caladeros.md)
 
-  %% Relaciones
-  DeEspecie{DE_ESPECIE}:::relacion
-  CapturadoPor{CAPTURADO_POR}:::relacion
-  Adjudicacion{ADJUDICACIÓN}:::relacion
-  EmiteC{EMITIDA_A}:::relacion
-  IncluyeLC{INCLUYE_LOTES}:::relacion
+## Compradores y subasta
 
-  %% Atributos LOTE
-  subgraph Lotes
-    direction TB
-    cod_lote([cod_lote PK]):::atributo --- Lote
-    num_cajas([num_cajas]):::atributo --- Lote
-    kilos_total([kilos_total]):::atributo --- Lote
-    fecha_llegada([fecha_llegada]):::atributo --- Lote
-    precio_salida_kg([precio_salida_kg]):::atributo --- Lote
-    precio_salida_total([precio_salida_total]):::atributo --- Lote
-    end
+![Especialización de compradores y adjudicación de lotes](Diagramas/03-subasta.png)
 
-  %% Atributos ESPECIE
-  subgraph Especies
-  cod_especie([cod_especie PK]):::atributo --- Especie
-  nombre_especie([nombre]):::atributo --- Especie
-  tipo_especie([tipo]):::atributo --- Especie
-  end
+**COMPRADOR** se especializa de forma total y disjunta. Cada comprador es de crédito o de contado. El primero aporta cuenta bancaria, último importe acumulado y vencimiento del mes en curso. El segundo aporta su forma habitual de pago, efectivo o tarjeta.
 
-  %% Atributos BARCO
-  subgraph Barcos
-  matricula([matricula PK]):::atributo --- Barco
-  nombre_barco([nombre]):::atributo --- Barco
-  clase_barco([clase]):::atributo --- Barco
-  capitan([capitan]):::atributo --- Barco
-  armador([armador]):::atributo --- Barco
-  end
+En **ADJUDICACION** el lote participa (0,1) y el comprador (0,N). Si el lote queda sin adjudicar, carece de ganador y de precio de adjudicación. Si se adjudica, se consignan el ganador, el precio de compra por kilo y el total. [Compradores](Schema/Compradores.md) · [Adjudicación](Schema/Adjudicación.md)
 
-  %% Atributos COMPRADOR
-  subgraph Compradores
-  cod_comprador([cod_comprador PK]):::atributo --- Comprador
-  nombre_compr([nombre]):::atributo --- Comprador
-  direccion_compr([direccion]):::atributo --- Comprador
-  dni_cif([dni_cif]):::atributo --- Comprador
-  cuota_anual([cuota_anual]):::atributo --- Comprador
-  end
+## Factura emitida y cobro
 
-  %% Atributos FACTURA_COMPRADOR
-  subgraph Facturas
-  num_fact_c([num_factura PK]):::atributo --- FacturaC
-  fecha_emision_c([fecha_emision]):::atributo --- FacturaC
-  importe_total_c([importe_total]):::atributo --- FacturaC
-  estado_c([estado]):::atributo --- FacturaC
-  end
+![Factura que emite la lonja al comprador y sus cobros](Diagramas/04-factura-emitida.png)
 
-  %% Atributos de la RELACIÓN ADJUDICACIÓN
-  precio_compra_kg([precio_compra_kg]):::atributo --- Adjudicacion
-  precio_total([precio_total]):::atributo --- Adjudicacion
+La lonja emite cada factura a un único comprador. Un comprador puede recibir (0,N) facturas. Cada factura incluye (1,N) lotes adjudicados a ese comprador. Cada lote puede figurar en (0,1) facturas emitidas. Un lote recién adjudicado puede estar aún por facturar.
 
-  %% Conexiones y cardinalidades
-  Lote ---|"(1,1)"| DeEspecie
-  DeEspecie ---|"(0,N)"| Especie
+Cada **VENTA** registra un cobro de la lonja asociado a una única factura emitida. La factura puede originar (0,N) cobros. Para un comprador de contado se obtiene el estado pendiente o pagada del saldo que queda tras esos cobros. [Facturas emitidas y cobros](Schema/Facturas.md)
 
-  Lote ---|"(1,1)"| CapturadoPor
-  CapturadoPor ------|"(1,N)"| Barco
+## Factura recibida y pago al barco
 
-  Lote ---|"(1,1)"| Adjudicacion
-  Adjudicacion ---|"(0,N)"| Comprador
+![Factura que emite el barco a la lonja y sus pagos](Diagramas/05-factura-recibida.png)
 
-  FacturaC ---|"(1,1)"| EmiteC
-  EmiteC ---|"(1,N)"| Comprador
+Cada factura recibida procede de un único barco y se identifica por su emisor y número. Un barco puede emitir (0,N) facturas. Se supone que cada factura recibida enumera (1,N) lotes del barco. Cada lote puede figurar en (0,1) facturas recibidas, con independencia de si la lonja ya lo ha facturado al comprador.
 
-  FacturaC ---|"(1,N)"| IncluyeLC
-  IncluyeLC ---|"(1,1)"| Lote
-
-```
-
+Cada **PAGO_BARCO** registra un pago de la lonja por una única factura recibida. La factura puede originar (0,N) pagos. El CIF se conoce a través del barco emisor. [Facturas recibidas y pagos](Schema/Facturas_Proveedor.md)

@@ -1,9 +1,9 @@
 # Adjudicación
 
-> Los lotes se subastan. Cada lote será adquirido por el comprador que realice la mejor puja. 
+Los lotes se subastan. Si un lote se adjudica, lo adquiere el comprador que realiza la mejor puja.
 - [x] Precio de compra por kilo
 - [x] Precio total de adjudicación del lote
-- [x] Cada lote será adquirido por __un__ comprador.
+- [x] Cada lote puede quedar sin adjudicar o ser adquirido por __un__ comprador.
 - [x] Un comprador puede adquirir varios lotes
 
 ```mermaid
@@ -18,9 +18,9 @@ flowchart TD
 
   Lote[LOTE]:::entidad
   Comprador[COMPRADOR]:::entidad
-  Adjudicacion{{ADJUDICACIÓN}}:::relacion
+  Adjudicacion{ADJUDICACIÓN}:::relacion
 
-  Adjudicacion --- precio_kg(["precio_compra_kg"]):::atributo  
+  Adjudicacion --- precio_kg(["precio_kg"]):::atributo
   Adjudicacion --- precio_total([precio_total]):::atributo 
 
   Lote ---|"(0,1)"| Adjudicacion
@@ -29,22 +29,16 @@ flowchart TD
 ```
 ```sql
 CREATE TABLE ADJUDICACION (
-    cod_lote            CHAR(5) PRIMARY KEY
-                        REFERENCES LOTE,
-    cod_comprador       CHAR(5) NOT NULL
-                        REFERENCES COMPRADOR,
-    precio_kg		    NUMBER(8,2),
-    precio_total		NUMBER(8,2)
-	);
-
+    cod_lote      CHAR(5) PRIMARY KEY REFERENCES LOTE (cod_lote),
+    cod_comprador CHAR(5) NOT NULL REFERENCES COMPRADOR (cod_comprador),
+    precio_kg     NUMBER(8,2) NOT NULL CHECK (precio_kg >= 0),
+    precio_total  NUMBER(8,2) NOT NULL CHECK (precio_total >= 0),
+    UNIQUE (cod_lote, cod_comprador)
+    );
 ```
-`cod_lote` es PK porque cada lote solo puede venderse una vez. Cada Lote tiene una Adjudicación exacta.
 
-`cod_comprador` es NOT NULL porque cada lote debe adjudicarse a alguien. Si no se adjudica, no se añade a la tabla. 
+`cod_lote` es PK porque un lote sólo puede venderse una vez. Si queda desierto, no se inserta una adjudicación. Toda adjudicación identifica a un comprador y conserva el precio por kilo y el total de compra.
 
+La pareja de lote y comprador sirve de destino a la clave ajena de INCLUYE. Así una factura emitida sólo admite lotes ganados por su titular.
 
-Si se modelara la subasta completa, sería necesario realizar la tabla que sería resultado de esa relación. Dentro de la dinámica de 'minimizar a lo necesario', no creo que sea rentable a largo plazo guardar todas las pujas en una base de datos a la larga, ya que su relevancia se esfuma en el momento de la adjudicación. Además, debido a la gran cantidad de pujas por subasta, esto aumentaría las necesidades materiales (memoria y procesamiento) exponencialmente. Esto encarecería el proyecto, su construcción y mantenimiento. 
-
-Esta decisión debería ser secundada por el cliente. Si les interesa hacer este registro, con el coste asociado en memoria y trabajo, se puede implementar una tabla que tendría parametros adecuados (cod_lote, cod_comprador, puja) para seleccionar una puja ganadora. 
-
-> Nota: A falta del simbolo en Mermaid de Github para tabla-relación, se ha usado un tag hexagonal largo, ya que su forma recuerda a la conjunción del rectángulo (tabla) y el rombo (relación).
+Se conserva la decisión de registrar la puja ganadora mediante la adjudicación. Las pujas perdedoras y su orden quedan fuera del modelo. Por tanto, no se puede reconstruir la subasta ni verificar después que la puja registrada fue la mejor. Si el cliente requiere esa auditoría, haría falta identificar y registrar cada puja.

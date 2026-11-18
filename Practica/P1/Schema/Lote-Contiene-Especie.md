@@ -18,8 +18,8 @@ flowchart LR
     num_cajas([num_cajas]):::atributo --- Lote
     kilos_total([kilos_total]):::atributo --- Lote
     fecha_llegada([fecha_llegada]):::atributo --- Lote
-    precio_kg([precio_salida_kg]):::atributo --- Lote
-    precio_total([precio_salida_total]):::atributo --- Lote
+    precio_kg([precio_kg_salida]):::atributo --- Lote
+    precio_total([precio_total_salida]):::atributo --- Lote
 
     %% Atributos de ESPECIE
     cod_especie(["🔑 <u>cod_especie</u>"]):::identificador --- Especie
@@ -27,7 +27,7 @@ flowchart LR
     tipo_especie([tipo]):::atributo --- Especie
 
     %% Cardinalidades (mínimo, máximo)
-    Lote ---|"(1,1)"| Contiene
+    Lote ===|"(1,1)"| Contiene
     Contiene ---|"(0,N)"| Especie
 
 ```
