@@ -71,10 +71,10 @@ SELECT
         ) AS estado
 FROM
     (FACTURAS_EMITIDAS AS F
-     INNER JOIN CONTADO AS C
-         ON F.cod_comprador = C.cod_comprador)
-    LEFT JOIN VENTA AS V
-        ON F.num_factura = V.num_factura
+     LEFT JOIN VENTA AS V
+         ON F.num_factura = V.num_factura)
+    INNER JOIN CONTADO AS C
+        ON F.cod_comprador = C.cod_comprador
 GROUP BY
     F.num_factura,
     F.importe_total;
